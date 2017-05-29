@@ -19,6 +19,16 @@ expression * makeString(char * ptr, std::size_t length);
 expression * makeInt(char * ptr, int length);
 
 /**
+   make an int expression given an int
+ */
+expression * makeInt(const int num);
+
+/**
+   make a c function expression from a c fuction
+ */
+expression * makeCFunc(cfunc fn);
+  
+/**
    delete any expression
  */
 void deleteExpression(expression * any);

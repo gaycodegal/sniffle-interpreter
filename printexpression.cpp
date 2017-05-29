@@ -33,17 +33,17 @@ void printStr(expression * exp){
 }
 
 void printList(expression * exp){
-  std::list<expression *> * list;
+  slist * list;
   expression * temp;
 
   if(exp->type == LIST_EXP){
-    list =  exp->data.list;
+    list = exp->data.list;
     std::cout << "(";
-    for (std::list<expression *>::const_iterator iterator = list->begin(), end = list->end(); iterator != end; ) {
-      temp = *iterator;
+    for (snode * iter = list->head; iter != NULL; ) {
+      temp = (expression *)(iter->elem);
       printAny(temp);
-      ++iterator;
-      if(iterator != end)
+      iter = iter->next;
+      if(iter != NULL)
 	std::cout << ' ';
     }
     std::cout << ")";

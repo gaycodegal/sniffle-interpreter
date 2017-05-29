@@ -2,7 +2,7 @@
 
 expression * makeList(expression * exp){
   exp->type = LIST_EXP;
-  exp->data.list = new std::list<expression*>();
+  exp->data.list = makeSList();
   return exp;
 }
 
@@ -27,14 +27,28 @@ expression * makeInt(char * ptr, int length){
   return exp;
 }
 
+expression * makeInt(const int num){
+  expression * exp = new expression();
+  exp->data.num = num;
+  exp->type = CONST_EXP;
+  return exp;
+}
+
+expression * makeCFunc(cfunc fn){
+  expression * exp = new expression();
+  exp->type = CFUNC_EXP;
+  exp->data.c_func = fn;
+  return exp;
+}
+
 void deleteExpression(expression * any){
-  std::list<expression *> * list;
+  slist * list;
   if(any->type == LIST_EXP){
     list = any->data.list;
-    for (std::list<expression *>::const_iterator iterator = list->begin(), end = list->end(); iterator != end; ++iterator) {
-      deleteExpression(*iterator);
+    for (snode * iter = list->head; iter != NULL; iter = iter->next) {
+      deleteExpression((expression *)(iter->elem));
     }
-    delete list;
+    freeList(list);
   }else if(any->type == STR_EXP){
     delete any->data.str;
   }
