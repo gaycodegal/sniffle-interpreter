@@ -5,7 +5,9 @@
 
 typedef std::unordered_map<std::string, struct s_expression*> environment;
 
-typedef struct s_expression * (* cfunc)(slist * args);
+typedef std::unordered_map<std::string, struct s_expression*>::iterator environmentIterator;
+
+typedef struct s_expression * (* cfunc)(struct s_expression * exp, environment * env, environment * args);
 
 /**
    the data types an expression can take on.

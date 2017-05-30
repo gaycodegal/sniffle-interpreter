@@ -6,6 +6,13 @@ expression * makeList(expression * exp){
   return exp;
 }
 
+expression * makeList(slist * lst){
+  expression * exp = new expression();
+  exp->type = LIST_EXP;
+  exp->data.list = lst;
+  return exp;
+}
+
 expression * makeString(char * ptr, std::size_t length){
   char c = ptr[length];
   ptr[length] = 0;
@@ -40,19 +47,29 @@ expression * makeCFunc(cfunc fn){
   exp->data.c_func = fn;
   return exp;
 }
+//enum EXP_ENUM { LIST_EXP, STR_EXP, VAR_EXP, CONST_EXP, SYM_EXP, ENV_EXP, CFUNC_EXP };
 
 void deleteExpression(expression * any){
   slist * list;
-  if(any->type == LIST_EXP){
+  snode * iter;
+  switch(any->type){
+  case LIST_EXP:    
     list = any->data.list;
-    for (snode * iter = list->head; iter != NULL; iter = iter->next) {
-      deleteExpression((expression *)(iter->elem));
+    if(list != NULL){
+      for (iter = list->head; iter != NULL; iter = iter->next) {
+	deleteExpression((expression *)(iter->elem));
+      }
+      freeList(list);
     }
-    freeList(list);
-  }else if(any->type == STR_EXP){
+    break;
+  case STR_EXP:
+  case VAR_EXP:
+  case SYM_EXP:
     delete any->data.str;
+    break;
+  case ENV_EXP:
+    delete any->data.env;
+    break;
   }
   delete any;
 }
-
-

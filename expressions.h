@@ -9,6 +9,11 @@
 expression * makeList(expression * exp);
 
 /**
+   make a list expression
+ */
+expression * makeList(slist * list);
+
+/**
    make a string expression
  */
 expression * makeString(char * ptr, std::size_t length);

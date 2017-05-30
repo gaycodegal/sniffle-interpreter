@@ -53,6 +53,9 @@ void printList(expression * exp){
 }
 
 void printAny(expression * any){
+  if(any == NULL){
+    std::cout << "NULL" << std::flush;
+  }
   switch (any->type){
   case LIST_EXP:
     printList(any);
@@ -62,6 +65,9 @@ void printAny(expression * any){
     break;
   case CONST_EXP:
     printConst(any);
+    break;
+  case CFUNC_EXP:
+    std::cout << "CFUNC" << std::flush;
     break;
   case VAR_EXP:
     printVar(any);
