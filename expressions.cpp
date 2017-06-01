@@ -25,7 +25,9 @@ expression * makeString(char * ptr, std::size_t length){
   ptr[length] = 0;
   std::string * s = new std::string(ptr);
   expression * exp = new expression();
-  exp->data.str = s;
+  sstr * temp = exp->data.str = new sstr();
+  temp->refs = 1;
+  temp->s = s;
   exp->type = STR_EXP;
   ptr[length] = c;
   return exp;
@@ -73,7 +75,9 @@ void deleteExpression(expression * any){
   case STR_EXP:
   case VAR_EXP:
   case SYM_EXP:
-    delete any->data.str;
+    if(--(any->data.str->refs) == 0){
+      delete any->data.str;
+    }
     break;
   case FUNC_EXP:
     if(--(any->data.func->refs) == 0){
@@ -103,7 +107,8 @@ expression * copyExpression(expression * any){
   case STR_EXP:
   case VAR_EXP:
   case SYM_EXP:
-    copy->data.str = new std::string(*any->data.str);
+    copy->data.str = any->data.str;
+    ++(any->data.str->refs);
     break;
   case CONST_EXP:
     copy->data.num = any->data.num;

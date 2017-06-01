@@ -29,3 +29,9 @@
 (if (= 1 2) "true" "false")
 (if (= "doggo" "doggo") "true" "false")
 (if (= "doggo" "gattar") "true" "false")
+(set fac (lambda (x)
+	   (if (= x 0)
+	       1
+	     (* x (fac (- x 1)))
+	     )))
+(fac 5)

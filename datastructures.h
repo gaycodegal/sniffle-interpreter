@@ -23,13 +23,18 @@ typedef struct s_expression * (* cfunc)(struct s_expression * exp, environment *
  */
 class LambdaFunc;
 
+typedef struct s_str{
+  std::string * s;
+  int refs;
+} sstr;
+
 /**
    the data types an expression can take on.
  */
 typedef union u_expdata {
   int num;
   environment * env;
-  std::string * str;
+  sstr * str;
   slist * list;
   cfunc c_func;
   LambdaFunc * func;

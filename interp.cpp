@@ -30,11 +30,11 @@ expression * setFunc(expression * arglist, environment * env, environment * args
   if(!(type == VAR_EXP || type == SYM_EXP || type == STR_EXP))
     return NULL;
   arg = evalAST((expression *)(temp->next->elem), env, args);
-  environmentIterator it = env->find(*(var->data.str)), end = env->end();
+  environmentIterator it = env->find(*(var->data.str->s)), end = env->end();
   if(end != it){
     deleteExpression(it->second);
   }
-  (*env)[*(var->data.str)] = arg;
+  (*env)[*(var->data.str->s)] = arg;
   return NULL;
 }
 
@@ -52,11 +52,11 @@ expression * setFunc2(expression * arglist, environment * env, environment * arg
   if(!(type == VAR_EXP || type == SYM_EXP || type == STR_EXP))
     return NULL;
   arg = evalAST((expression *)(temp->next->elem), env, args);
-  environmentIterator it = args->find(*(var->data.str)), end = args->end();
+  environmentIterator it = args->find(*(var->data.str->s)), end = args->end();
   if(end != it){
     deleteExpression(it->second);
   }
-  (*args)[*(var->data.str)] = arg;
+  (*args)[*(var->data.str->s)] = arg;
   return NULL;
 }
 
@@ -163,7 +163,7 @@ expression * eqFunc(expression * arglist, environment * env, environment * args)
 	sum = 1;
       break;
     case STR_EXP:
-      if(*(a->data.str) == *(b->data.str))
+      if(*(a->data.str->s) == *(b->data.str->s))
 	sum = 1;
       break;
     }
@@ -372,14 +372,14 @@ expression * evalAST(expression * prog, environment * env, environment *args){
   switch(prog->type){
   case VAR_EXP:
     if(args != NULL){
-      it = args->find(*(prog->data.str));
+      it = args->find(*(prog->data.str->s));
       if(it != args->end()){
 	return copyExpression(it->second);
 	break;
       }
     }
     if(env != NULL){
-      it = env->find(*(prog->data.str));
+      it = env->find(*(prog->data.str->s));
       if(it != env->end()){
 	return copyExpression(it->second);
 	break;

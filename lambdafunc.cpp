@@ -18,11 +18,11 @@ expression * LambdaFunc::exec(expression * arglist, environment * env){
   for (; iter != NULL && argi != NULL; iter = iter->next, argi = argi->next) {
     temp = (expression *)(iter->elem);
     arg = (expression *)(argi->elem);
-    it = data->find(*(arg->data.str));
+    it = data->find(*(arg->data.str->s));
     if(it != end){
       deleteExpression(it->second);
     }
-    (*data)[*(arg->data.str)] = temp;
+    (*data)[*(arg->data.str->s)] = temp;
   }
   for (; iter != NULL; iter = iter->next) {
     deleteExpression((expression *)(iter->elem));

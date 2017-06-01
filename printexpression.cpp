@@ -2,7 +2,7 @@
 
 void printVar(expression * exp){
   if(exp->type == VAR_EXP){
-    std::cout << *exp->data.str;
+    std::cout << *exp->data.str->s;
   }else{
     std::cout << "NOT_A_VAR";    
   }
@@ -29,7 +29,7 @@ void printLambda(expression * exp){
 
 void printSym(expression * exp){
   if(exp->type == SYM_EXP){
-    std::cout << '\'' << *exp->data.str;
+    std::cout << '\'' << *exp->data.str->s;
   }else{
     std::cout << "NOT_A_SYM";    
   }
@@ -37,7 +37,7 @@ void printSym(expression * exp){
 
 void printStr(expression * exp){
   if(exp->type == STR_EXP){
-    std::cout << '"' << *exp->data.str << '"';
+    std::cout << '"' << *exp->data.str->s << '"';
   }else{
     std::cout << "NOT_A_STR";    
   }
