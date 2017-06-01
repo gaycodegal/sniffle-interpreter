@@ -50,6 +50,7 @@ expression * makeCFunc(cfunc fn){
 //enum EXP_ENUM { LIST_EXP, STR_EXP, VAR_EXP, CONST_EXP, SYM_EXP, ENV_EXP, CFUNC_EXP };
 
 void deleteExpression(expression * any){
+  if(any == NULL) return;
   slist * list;
   snode * iter;
   switch(any->type){
@@ -72,6 +73,8 @@ void deleteExpression(expression * any){
 }
 
 expression * copyExpression(expression * any){
+  if(any == NULL)
+    return NULL;
   expression * copy = new expression();
   slist * list, *list2;
   snode * iter, *iter2;

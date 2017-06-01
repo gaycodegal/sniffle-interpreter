@@ -55,6 +55,7 @@ void printList(expression * exp){
 void printAny(expression * any){
   if(any == NULL){
     std::cout << "NULL" << std::flush;
+    return;
   }
   switch (any->type){
   case LIST_EXP:

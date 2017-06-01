@@ -17,7 +17,6 @@ Currently at the Abstract Syntax Tree (AST) level. Not well written - there is n
   - Fixed Memory Execution
   - Specify the amount of memory the execution of a program should be bounded by.
   - Custom environment specification (environment copying and extension)
-- Automatic Reference Counting (Deallocation as soon as reference hits 0)
 - Easy function binding
   - Bind C++ and C methods directly into Sniffle
 - Variable and fixed number of arguments into a function

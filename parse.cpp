@@ -85,7 +85,7 @@ expression * parseList(char * data, std::size_t size){
 	++i;
 	i = i + seekEndOfStr(data + i) - 1;
 	pushStr(inputhandled, parent, data, i, lastpos, type);
-      }else if ((data[i] >= '0' && data[i] <= '9') || data[i] == '-'){
+      }else if ((data[i] >= '0' && data[i] <= '9') || (data[i] == '-' && i + 1 < size && (data[i + 1] >= '0' && data[i + 1] <= '9'))){
 	type = CONST_EXP;
 	pushInt(parent, data + i, i);
 	inputhandled = true;
