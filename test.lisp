@@ -1,5 +1,6 @@
 (+ 1 2 3)
 ((lambda (a b) (+ a b)) 1 2)
+()
 (set f (lambda (a b) (/ b a)))
 (f 3 6)
 (+ 0 six)

@@ -1,5 +1,17 @@
 #include "lispinclude.h"
 
+expression * printAnyFunc(expression * arglist, environment * env, environment * args){
+  expression * temp;
+  slist * list = evalList(arglist->data.list, env, args);
+  for (snode * iter = list->head; iter != NULL; iter = iter->next) {
+    temp = (expression *)(iter->elem);
+    printAny(temp);
+    deleteExpression(temp);
+  }
+  freeList(list);
+  return NULL;
+}
+
 expression * setFunc(expression * arglist, environment * env, environment * args){
   expression * var, *arg;
   slist * list = arglist->data.list;
@@ -19,6 +31,28 @@ expression * setFunc(expression * arglist, environment * env, environment * args
     deleteExpression(it->second);
   }
   (*env)[*(var->data.str)] = arg;
+  return NULL;
+}
+
+expression * setFunc2(expression * arglist, environment * env, environment * args){
+  expression * var, *arg;
+  slist * list = arglist->data.list;
+  snode * temp = list->head;
+  int type;
+  if(list->len < 2)
+    return NULL;
+  var = (expression *)(temp->elem);
+  if(var == NULL)
+    return NULL;
+  type = var->type;
+  if(!(type == VAR_EXP || type == SYM_EXP || type == STR_EXP))
+    return NULL;
+  arg = evalAST((expression *)(temp->next->elem), env, args);
+  environmentIterator it = args->find(*(var->data.str)), end = args->end();
+  if(end != it){
+    deleteExpression(it->second);
+  }
+  (*args)[*(var->data.str)] = arg;
   return NULL;
 }
 
@@ -59,6 +93,30 @@ expression * orFunc(expression * arglist, environment * env, environment * args)
     deleteExpression(temp);
   }
   return makeInt(sum);
+}
+
+expression * ifFunc(expression * arglist, environment * env, environment * args){
+  expression * temp;
+  slist * list = arglist->data.list;
+  int dofirst = 0;
+  if(list->len < 3)
+    return NULL;
+  temp = evalAST((expression *)(iter->elem), env, args);
+  iter = iter->next;
+  if(temp != NULL){
+    if(temp->type == CONST_EXP){
+      dofirst = temp->data.num;
+    }else{
+      dofirst = 1;
+    }
+  }else{
+    dofirst = 0;
+  }
+  deleteExpression(temp);
+  if(dofirst == 0){
+    iter = iter->next;
+  }
+  return evalAST((expression *)(iter->elem), env, args);
 }
 
 expression * andFunc(expression * arglist, environment * env, environment * args){
@@ -235,7 +293,10 @@ int main(int argc, char ** argv){
   (*ENV)["or"] = makeCFunc(&orFunc);
   (*ENV)["and"] = makeCFunc(&andFunc);
   (*ENV)["set"] = makeCFunc(&setFunc);
+  (*ENV)["local"] = makeCFunc(&setFunc);
   (*ENV)["lambda"] = makeCFunc(&lambdaMakerFunc);
+  (*ENV)["pprint"] = makeCFunc(&printAnyFunc);
+  (*ENV)["if"] = makeCFunc(&ifFunc);
   for(iter = prog->data.list->head; iter != NULL; iter = iter->next){
     temp = (expression *)(iter->elem);
     printAny(temp);
