@@ -8,10 +8,6 @@ slist * makeSList(){
   return list;
 }
 
-int getLen(slist * list){
-  return list->len;
-}
-
 snode * makeNode(void * elem){
   snode *node = (snode *)malloc(sizeof(snode));
   node->next = NULL;

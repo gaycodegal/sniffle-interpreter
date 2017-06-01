@@ -15,6 +15,9 @@
 #include "interp.h"
 #include "lambdafunc.h"
 
+/**
+   the types an expression can take on.
+ */
 enum EXP_ENUM { LIST_EXP, STR_EXP, VAR_EXP, CONST_EXP, SYM_EXP, CFUNC_EXP, FUNC_EXP };
 
 #endif

@@ -179,6 +179,10 @@ expression * subtractFunc(expression * arglist, environment * env, environment *
   slist * list = evalList(arglist->data.list, env, args);
   int sum = 0;
   bool first = true;
+
+  if(list->len == 1)
+    first = false;
+  
   for (snode * iter = list->head; iter != NULL; iter = iter->next) {
     temp = (expression *)(iter->elem);
     if(temp != NULL && temp->type == CONST_EXP){

@@ -1,21 +1,5 @@
 #include "lispinclude.h"
 
-/*
-  First things first ima say all the words inside my head
-  A list (a b c d e)
-  a symbol 'a 'b 'c
-  a value 1 'c' "2"
-  first parse for symbol vs string vs const vs list vs var-exp
-  that means we'll need a stack for list pointers
-  and various modes:
-  - PARSE_CONST
-  - PARSE_SYM
-  - PARSE_LIST
-  - PARSE_STRING
-  - PARSE_VAR
-*/
-
-
 inline void pushStr(bool & inputhandled, expression * parent, char * data, const std::size_t i, const std::size_t lastpos, int type){
   std::size_t tmp;
   char * p;

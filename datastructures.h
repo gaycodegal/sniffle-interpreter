@@ -3,12 +3,24 @@
 
 #include "lispinclude.h"
 
+/**
+   the current type for an environment.
+ */
 typedef std::unordered_map<std::string, struct s_expression*> environment;
 
+/**
+   the current type for an environment iterator.
+ */
 typedef std::unordered_map<std::string, struct s_expression*>::iterator environmentIterator;
 
+/**
+   the type of any funciton that can be bound as a c function
+ */
 typedef struct s_expression * (* cfunc)(struct s_expression * exp, environment * env, environment * args);
 
+/**
+   to prevent loading issues.
+ */
 class LambdaFunc;
 
 /**
