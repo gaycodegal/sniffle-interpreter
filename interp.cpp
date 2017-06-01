@@ -60,7 +60,6 @@ expression * setFunc2(expression * arglist, environment * env, environment * arg
   return NULL;
 }
 
-
 expression * lambdaMakerFunc(expression * arglist, environment * env, environment * args){
   expression * expr, * lamargs;
   slist * list = arglist->data.list;
@@ -79,6 +78,40 @@ expression * lambdaMakerFunc(expression * arglist, environment * env, environmen
   lamargs->data.list = NULL;
   deleteExpression(lamargs);
   return makeLambda(func);
+}
+
+expression * beginFunc(expression * arglist, environment * env, environment * args){
+  expression * temp = NULL;
+  slist * list = arglist->data.list;
+  for (snode * iter = list->head; iter != NULL;) {
+    temp = evalAST((expression *)(iter->elem), env, args);
+    iter = iter->next;
+    if(iter != NULL)
+      deleteExpression(temp);
+  }
+  return temp;
+}
+
+expression * whileFunc(expression * arglist, environment * env, environment * args){
+  expression * cond = NULL, *ret = NULL;
+  slist * list = arglist->data.list;
+  snode * iter;
+  while (true){
+    iter = list->head;
+    cond = evalAST((expression *)(iter->elem), env, args);
+    if(cond == NULL || (cond->type == CONST_EXP && cond->data.num == 0)){
+      deleteExpression(cond);
+      break;
+    }
+    deleteExpression(ret);
+    for (iter = iter->next; iter != NULL;) {
+      ret = evalAST((expression *)(iter->elem), env, args);
+      iter = iter->next;
+      if(iter != NULL)
+	deleteExpression(ret);
+    }
+  }
+  return ret;
 }
 
 expression * orFunc(expression * arglist, environment * env, environment * args){
@@ -440,6 +473,8 @@ int main(int argc, char ** argv){
   (*ENV)["set"] = makeCFunc(&setFunc);
   (*ENV)["local"] = makeCFunc(&setFunc2);
   (*ENV)["lambda"] = makeCFunc(&lambdaMakerFunc);
+  (*ENV)["while"] = makeCFunc(&whileFunc);
+  (*ENV)["begin"] = makeCFunc(&beginFunc);
   (*ENV)["pprint"] = makeCFunc(&printAnyFunc);
   (*ENV)[">"] = makeCFunc(&gtFunc);
   (*ENV)[">="] = makeCFunc(&geFunc);

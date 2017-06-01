@@ -33,7 +33,8 @@ Not well written, but functional and small.
 - (>= NUM1 NUM2)
 - (= NUM1 NUM2)
 - (= STR1 STR2)
-
+- (begin EXP1 EXP2 ... EXPN)
+- (while BOOL EXP1 EXP2 ... EXPN)
 ## Rules important for use
 
 - Don't store lambda functions inside lambda

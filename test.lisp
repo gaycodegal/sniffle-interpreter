@@ -4,6 +4,7 @@
 (set f (lambda (a b) (if spooky (pprint b a "spooky doggo" spooky) (or (local spooky 101) (pprint a b "non spooky doggo" spooky)))))
 (f 3 6)
 (f)
+(f () ())
 (pprint "even spookier" spooky)
 (f 4 2)
 (f)

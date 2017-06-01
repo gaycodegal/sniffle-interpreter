@@ -1,0 +1,7 @@
+(begin (set f (lambda (x) (if (= x 0) 1 (+ x (f (- x 1))))))
+       (f 1000))
+(set x 200)
+(while (>= x 0)
+  (pprint x)
+  (set x (- x 1))
+  )
