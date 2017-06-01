@@ -200,19 +200,26 @@ expression * divideFunc(expression * arglist, environment * env, environment * a
   slist * list = evalList(arglist->data.list, env, args);
   int sum = 1;
   bool first = true;
+  bool failed = false;
+  int num = 0;
   for (snode * iter = list->head; iter != NULL; iter = iter->next) {
     temp = (expression *)(iter->elem);
     if(temp != NULL && temp->type == CONST_EXP){
+      num = temp->data.num;
       if(first){
 	first = false;
-	sum *= temp->data.num;
-      }else{
+	sum *= num;
+      }else if(num != 0){
 	sum /= temp->data.num;
+      }else{
+	failed = true;
       }
     }
     deleteExpression(temp);
   }
   freeList(list);
+  if(failed)
+    return NULL;
   return makeInt(sum);
 }
 
