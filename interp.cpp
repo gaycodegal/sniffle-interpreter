@@ -9,7 +9,9 @@ expression * addFunc(expression * arglist, environment * env, environment * args
     if(temp->type == CONST_EXP){
       sum += temp->data.num;
     }
+    deleteExpression(temp);
   }
+  freeList(list);
   return makeInt(sum);
 }
 
@@ -31,14 +33,14 @@ expression * evalAST(expression * prog, environment * env, environment *args){
     if(args != NULL){
       it = args->find(*(prog->data.str));
       if(it != args->end()){
-	return it->second;
+	return copyExpression(it->second);
 	break;
       }
     }
     if(env != NULL){
       it = env->find(*(prog->data.str));
       if(it != env->end()){
-	return it->second;
+	return copyExpression(it->second);
 	break;
       }
     }
@@ -50,22 +52,18 @@ expression * evalAST(expression * prog, environment * env, environment *args){
     if(temp != NULL){
       tlist = cdrNode(prog->data.list);
       temp2 = makeList(tlist);
-      /*for(iter = tlist->head; iter != NULL; iter = iter->next){
-	iter->elem = (void *)evalAst((expression *)(iter->elem), env, args);
-	}
-      */
       if(temp->type == CFUNC_EXP){
 	ret = temp->data.c_func(temp2, env, args);
       }
       free(tlist);
       temp2->data.list = NULL;
-      /*deleteExpression(temp);*/
       deleteExpression(temp2);
+      deleteExpression(temp);
       return ret;
     }
     break;
   default:
-    return prog;
+    return copyExpression(prog);
     break;
   }
   return NULL;

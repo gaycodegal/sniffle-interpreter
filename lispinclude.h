@@ -14,6 +14,6 @@
 #include "parse.h"
 #include "interp.h"
 
-enum EXP_ENUM { LIST_EXP, STR_EXP, VAR_EXP, CONST_EXP, SYM_EXP, ENV_EXP, CFUNC_EXP };
+enum EXP_ENUM { LIST_EXP, STR_EXP, VAR_EXP, CONST_EXP, SYM_EXP, CFUNC_EXP };
 
 #endif

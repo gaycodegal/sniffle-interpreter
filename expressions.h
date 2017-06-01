@@ -38,4 +38,9 @@ expression * makeCFunc(cfunc fn);
  */
 void deleteExpression(expression * any);
 
+/**
+   copy any expression
+ */
+expression * copyExpression(expression * any);
+
 #endif

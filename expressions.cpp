@@ -67,9 +67,33 @@ void deleteExpression(expression * any){
   case SYM_EXP:
     delete any->data.str;
     break;
-  case ENV_EXP:
-    delete any->data.env;
-    break;
   }
   delete any;
+}
+
+expression * copyExpression(expression * any){
+  expression * copy = new expression();
+  slist * list, *list2;
+  snode * iter, *iter2;
+  copy->type = any->type;
+  switch(any->type){
+  case LIST_EXP:    
+    list = any->data.list;
+    list2 = copyList(list);
+    for (iter = list->head, iter2 = list2->head; iter != NULL; iter = iter->next, iter2 = iter2->next) {
+      iter2->elem = (void*)copyExpression((expression *)(iter->elem));
+    }
+    break;
+  case STR_EXP:
+  case VAR_EXP:
+  case SYM_EXP:
+    copy->data.str = any->data.str;
+    break;
+  case CONST_EXP:
+    copy->data.num = any->data.num;
+    break;
+  case CFUNC_EXP:
+    copy->data.c_func = any->data.c_func;
+  }
+  return copy;
 }
