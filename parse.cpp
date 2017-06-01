@@ -60,10 +60,7 @@ expression * parseList(char * data, std::size_t size){
     }else if(inputhandled){
       inputhandled = false;
       lastpos = i;
-      if(data[i] == '\''){
-	type = SYM_EXP;
-	++lastpos;
-      }else if(data[i] == '"'){
+      if(data[i] == '"'){
 	type = STR_EXP;
 	++lastpos;
 	++i;

@@ -27,14 +27,6 @@ void printLambda(expression * exp){
   }
 }
 
-void printSym(expression * exp){
-  if(exp->type == SYM_EXP){
-    std::cout << '\'' << *exp->data.str->s;
-  }else{
-    std::cout << "NOT_A_SYM";    
-  }
-}
-
 void printStr(expression * exp){
   if(exp->type == STR_EXP){
     std::cout << '"' << *exp->data.str->s << '"';
@@ -83,9 +75,6 @@ void printAny(expression * any){
     break;
   case VAR_EXP:
     printVar(any);
-    break;
-  case SYM_EXP:
-    printSym(any);
     break;
   case FUNC_EXP:
     printLambda(any);

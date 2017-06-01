@@ -14,11 +14,6 @@ void printVar(expression * exp);
 void printConst(expression * exp);
 
 /**
-   print out a sym exp
- */
-void printSym(expression * exp);
-
-/**
    print out a str exp
  */
 void printStr(expression * exp);

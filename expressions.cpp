@@ -74,7 +74,6 @@ void deleteExpression(expression * any){
     break;
   case STR_EXP:
   case VAR_EXP:
-  case SYM_EXP:
     if(--(any->data.str->refs) == 0){
       delete any->data.str;
     }
@@ -106,7 +105,6 @@ expression * copyExpression(expression * any){
     break;
   case STR_EXP:
   case VAR_EXP:
-  case SYM_EXP:
     copy->data.str = any->data.str;
     ++(any->data.str->refs);
     break;

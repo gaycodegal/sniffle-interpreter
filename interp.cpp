@@ -27,7 +27,7 @@ expression * setFunc(expression * arglist, environment * env, environment * args
   if(var == NULL)
     return NULL;
   type = var->type;
-  if(!(type == VAR_EXP || type == SYM_EXP || type == STR_EXP))
+  if(!(type == VAR_EXP || type == STR_EXP))
     return NULL;
   arg = evalAST((expression *)(temp->next->elem), env, args);
   environmentIterator it = env->find(*(var->data.str->s)), end = env->end();
@@ -49,7 +49,7 @@ expression * setFunc2(expression * arglist, environment * env, environment * arg
   if(var == NULL)
     return NULL;
   type = var->type;
-  if(!(type == VAR_EXP || type == SYM_EXP || type == STR_EXP))
+  if(!(type == VAR_EXP || type == STR_EXP))
     return NULL;
   arg = evalAST((expression *)(temp->next->elem), env, args);
   environmentIterator it = args->find(*(var->data.str->s)), end = args->end();
