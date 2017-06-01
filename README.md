@@ -14,6 +14,19 @@ Not well written, but functional and small.
 - Function binding
   - Bind C++ and C methods directly into Sniffle as long as they are of the proper format
 
+## Language Methods
+
+- (if BOOL PATH1 PATH2)
+- (or BOOL1 BOOL2 ... BOOLN)
+- (and BOOL1 BOOL2 ... BOOLN)
+- (set VAR VAL)
+- (local VAR VAL)
+- (lambda (VAR1 VAR2 ... VARN) PROG)
+- (pprint EXP1 EXP2 ... EXPN)
+- (+ NUM1 NUM2 ... NUMN)
+- (- NUM1 NUM2 ... NUMN)
+- (/ NUM1 NUM2 ... NUMN)
+- (* NUM1 NUM2 ... NUMN)
 
 ## Language Features (Goals)
 
