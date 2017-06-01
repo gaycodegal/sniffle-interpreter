@@ -1,6 +1,31 @@
 #include "lispinclude.h"
 
 /**
+   evaluates if two things are equal.
+*/
+expression * eqFunc(expression * arglist, environment * env, environment * args);
+
+/**
+   evaluates if two things are >.
+*/
+expression * gtFunc(expression * arglist, environment * env, environment * args);
+
+/**
+   evaluates if two things are >=.
+*/
+expression * geFunc(expression * arglist, environment * env, environment * args);
+
+/**
+   evaluates if two things are <.
+*/
+expression * ltFunc(expression * arglist, environment * env, environment * args);
+
+/**
+   evaluates if two things are <=.
+*/
+expression * leFunc(expression * arglist, environment * env, environment * args);
+
+/**
    A printing C_FUNC available in sniffle.
  */
 expression * printAnyFunc(expression * arglist, environment * env, environment * args);

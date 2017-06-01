@@ -144,6 +144,135 @@ expression * andFunc(expression * arglist, environment * env, environment * args
   return makeInt(sum);
 }
 
+expression * eqFunc(expression * arglist, environment * env, environment * args){
+  expression * a, * b;
+  slist * list = arglist->data.list;
+  snode * head;
+  int sum = 0, type;
+  if(list->len != 2)
+    return NULL;
+  list = evalList(list, env, args);
+  head = list->head;
+  a = (expression *)(head->elem);
+  b = (expression *)(head->next->elem);
+  type = a->type;
+  if(a->type == b->type){
+    switch(type){
+    case CONST_EXP:
+      if(a->data.num == b->data.num)
+	sum = 1;
+      break;
+    case STR_EXP:
+      if(*(a->data.str) == *(b->data.str))
+	sum = 1;
+      break;
+    }
+    
+  }
+  
+  deleteExpression(a);
+  deleteExpression(b);
+  
+  freeList(list);
+  return makeInt(sum);
+}
+
+expression * gtFunc(expression * arglist, environment * env, environment * args){
+  expression * a, * b;
+  slist * list = arglist->data.list;
+  snode * head;
+  int sum = 0;
+  if(list->len != 2)
+    return NULL;
+  list = evalList(list, env, args);
+  head = list->head;
+  a = (expression *)(head->elem);
+  b = (expression *)(head->next->elem);
+
+  if(a->type == CONST_EXP && b->type == CONST_EXP){
+    if(a->data.num > b->data.num)
+      sum = 1;
+  }
+  
+  deleteExpression(a);
+  deleteExpression(b);
+  
+  freeList(list);
+  return makeInt(sum);
+}
+
+expression * geFunc(expression * arglist, environment * env, environment * args){
+  expression * a, * b;
+  slist * list = arglist->data.list;
+  snode * head;
+  int sum = 0;
+  if(list->len != 2)
+    return NULL;
+  list = evalList(list, env, args);
+  head = list->head;
+  a = (expression *)(head->elem);
+  b = (expression *)(head->next->elem);
+
+  if(a->type == CONST_EXP && b->type == CONST_EXP){
+    if(a->data.num >= b->data.num)
+      sum = 1;
+  }
+  
+  deleteExpression(a);
+  deleteExpression(b);
+  
+  freeList(list);
+  return makeInt(sum);
+}
+
+expression * ltFunc(expression * arglist, environment * env, environment * args){
+  expression * a, * b;
+  slist * list = arglist->data.list;
+  snode * head;
+  int sum = 0;
+  if(list->len != 2)
+    return NULL;
+  list = evalList(list, env, args);
+  head = list->head;
+  a = (expression *)(head->elem);
+  b = (expression *)(head->next->elem);
+
+  if(a->type == CONST_EXP && b->type == CONST_EXP){
+    if(a->data.num < b->data.num)
+      sum = 1;
+  }
+  
+  deleteExpression(a);
+  deleteExpression(b);
+  
+  freeList(list);
+  return makeInt(sum);
+}
+
+expression * leFunc(expression * arglist, environment * env, environment * args){
+  expression * a, * b;
+  slist * list = arglist->data.list;
+  snode * head;
+  int sum = 0;
+  if(list->len != 2)
+    return NULL;
+  list = evalList(list, env, args);
+  head = list->head;
+  a = (expression *)(head->elem);
+  b = (expression *)(head->next->elem);
+
+  if(a->type == CONST_EXP && b->type == CONST_EXP){
+    if(a->data.num <= b->data.num)
+      sum = 1;
+  }
+  
+  deleteExpression(a);
+  deleteExpression(b);
+  
+  freeList(list);
+  return makeInt(sum);
+}
+
 expression * addFunc(expression * arglist, environment * env, environment * args){
   expression * temp;
   slist * list = evalList(arglist->data.list, env, args);
@@ -312,7 +441,13 @@ int main(int argc, char ** argv){
   (*ENV)["local"] = makeCFunc(&setFunc2);
   (*ENV)["lambda"] = makeCFunc(&lambdaMakerFunc);
   (*ENV)["pprint"] = makeCFunc(&printAnyFunc);
+  (*ENV)[">"] = makeCFunc(&gtFunc);
+  (*ENV)[">="] = makeCFunc(&geFunc);
+  (*ENV)["<"] = makeCFunc(&ltFunc);
+  (*ENV)["<="] = makeCFunc(&leFunc);
+  (*ENV)["="] = makeCFunc(&eqFunc);
   (*ENV)["if"] = makeCFunc(&ifFunc);
+
   for(iter = prog->data.list->head; iter != NULL; iter = iter->next){
     temp = (expression *)(iter->elem);
     printAny(temp);

@@ -27,6 +27,18 @@ Not well written, but functional and small.
 - (- NUM1 NUM2 ... NUMN)
 - (/ NUM1 NUM2 ... NUMN)
 - (* NUM1 NUM2 ... NUMN)
+- (< NUM1 NUM2)
+- (> NUM1 NUM2)
+- (<= NUM1 NUM2)
+- (>= NUM1 NUM2)
+- (= NUM1 NUM2)
+- (= STR1 STR2)
+
+## Rules important for use
+
+- Don't store lambda functions inside lambda
+  functions in a loop unless you break that loop before
+  program termination
 
 ## Language Features (Goals)
 
