@@ -13,6 +13,13 @@ expression * makeList(slist * lst){
   return exp;
 }
 
+expression * makeLambda(LambdaFunc * lam){
+  expression * exp = new expression();
+  exp->type = FUNC_EXP;
+  exp->data.func = lam;
+  return exp;
+}
+
 expression * makeString(char * ptr, std::size_t length){
   char c = ptr[length];
   ptr[length] = 0;
@@ -68,6 +75,11 @@ void deleteExpression(expression * any){
   case SYM_EXP:
     delete any->data.str;
     break;
+  case FUNC_EXP:
+    if(--(any->data.func->refs) == 0){
+      delete any->data.func;
+    }
+    break;
   }
   delete any;
 }
@@ -86,17 +98,23 @@ expression * copyExpression(expression * any){
     for (iter = list->head, iter2 = list2->head; iter != NULL; iter = iter->next, iter2 = iter2->next) {
       iter2->elem = (void*)copyExpression((expression *)(iter->elem));
     }
+    copy->data.list = list2;
     break;
   case STR_EXP:
   case VAR_EXP:
   case SYM_EXP:
-    copy->data.str = any->data.str;
+    copy->data.str = new std::string(*any->data.str);
     break;
   case CONST_EXP:
     copy->data.num = any->data.num;
     break;
   case CFUNC_EXP:
     copy->data.c_func = any->data.c_func;
+    break;
+  case FUNC_EXP:
+    copy->data.func = any->data.func;
+    ++(any->data.func->refs);
+    break;
   }
   return copy;
 }

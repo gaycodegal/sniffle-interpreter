@@ -16,6 +16,17 @@ void printConst(expression * exp){
   }
 }
 
+void printLambda(expression * exp){
+  if(exp->type == FUNC_EXP){
+    //LambdaFunc * lam = exp->data.func;
+    std::cout << "lambda";
+    /*for(snode * i
+      std::cout << exp->data.num;*/
+  }else{
+    std::cout << "NOT_A_FUNC";    
+  }
+}
+
 void printSym(expression * exp){
   if(exp->type == SYM_EXP){
     std::cout << '\'' << *exp->data.str;
@@ -75,6 +86,9 @@ void printAny(expression * any){
     break;
   case SYM_EXP:
     printSym(any);
+    break;
+  case FUNC_EXP:
+    printLambda(any);
     break;
   default:
     printStr(any);

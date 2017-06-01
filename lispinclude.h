@@ -13,7 +13,8 @@
 #include "filereader.h"
 #include "parse.h"
 #include "interp.h"
+#include "lambdafunc.h"
 
-enum EXP_ENUM { LIST_EXP, STR_EXP, VAR_EXP, CONST_EXP, SYM_EXP, CFUNC_EXP };
+enum EXP_ENUM { LIST_EXP, STR_EXP, VAR_EXP, CONST_EXP, SYM_EXP, CFUNC_EXP, FUNC_EXP };
 
 #endif

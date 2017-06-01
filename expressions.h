@@ -14,6 +14,11 @@ expression * makeList(expression * exp);
 expression * makeList(slist * list);
 
 /**
+   make a lambda expression
+ */
+expression * makeLambda(LambdaFunc * lambda);
+
+/**
    make a string expression
  */
 expression * makeString(char * ptr, std::size_t length);

@@ -14,26 +14,33 @@ expression * setFunc(expression * arglist, environment * env, environment * args
   if(!(type == VAR_EXP || type == SYM_EXP || type == STR_EXP))
     return NULL;
   arg = evalAST((expression *)(temp->next->elem), env, args);
+  environmentIterator it = env->find(*(var->data.str)), end = env->end();
+  if(end != it){
+    deleteExpression(it->second);
+  }
   (*env)[*(var->data.str)] = arg;
   return NULL;
 }
 
+
 expression * lambdaMakerFunc(expression * arglist, environment * env, environment * args){
-  expression * var, *arg;
+  expression * expr, * lamargs;
   slist * list = arglist->data.list;
-  snode * temp = list->head;
-  int type;
-  if(list->len < 2)
+  snode * temp = list->head, *iter;
+  LambdaFunc * func;
+  lamargs = (expression *)(temp->elem);
+  if(lamargs->type != LIST_EXP)
     return NULL;
-  var = (expression *)(temp->elem);
-  if(var == NULL)
-    return NULL;
-  type = var->type;
-  if(!(type == VAR_EXP || type == SYM_EXP || type == STR_EXP))
-    return NULL;
-  arg = evalAST((expression *)(temp->next->elem), env, args);
-  (*env)[*(var->data.str)] = arg;
-  return NULL;
+  for(iter = lamargs->data.list->head; iter != NULL; iter = iter->next){
+    expr = (expression*)(iter->elem);
+    if(expr == NULL || expr->type != VAR_EXP)
+      return NULL;
+  }
+  lamargs = copyExpression(lamargs);
+  func = new LambdaFunc(lamargs->data.list, copyExpression((expression *)(temp->next->elem)));
+  lamargs->data.list = NULL;
+  deleteExpression(lamargs);
+  return makeLambda(func);
 }
 
 expression * orFunc(expression * arglist, environment * env, environment * args){
@@ -187,6 +194,8 @@ expression * evalAST(expression * prog, environment * env, environment *args){
       temp2 = makeList(tlist);
       if(temp->type == CFUNC_EXP){
 	ret = temp->data.c_func(temp2, env, args);
+      }else if(temp->type == FUNC_EXP){
+	ret = temp->data.func->exec(temp2, env);
       }else{
 	ret = NULL;
       }

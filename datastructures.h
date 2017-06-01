@@ -9,6 +9,8 @@ typedef std::unordered_map<std::string, struct s_expression*>::iterator environm
 
 typedef struct s_expression * (* cfunc)(struct s_expression * exp, environment * env, environment * args);
 
+class LambdaFunc;
+
 /**
    the data types an expression can take on.
  */
@@ -18,6 +20,7 @@ typedef union u_expdata {
   std::string * str;
   slist * list;
   cfunc c_func;
+  LambdaFunc * func;
 } expdata;
 
 /**
