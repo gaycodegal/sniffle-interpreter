@@ -3,11 +3,15 @@
 expression * printAnyFunc(expression * arglist, environment * env, environment * args){
   expression * temp;
   slist * list = evalList(arglist->data.list, env, args);
-  for (snode * iter = list->head; iter != NULL; iter = iter->next) {
+  for (snode * iter = list->head; iter != NULL; ) {
     temp = (expression *)(iter->elem);
     printAny(temp);
+    iter = iter->next;
+    if(iter != NULL)
+      std::cout << " ";
     deleteExpression(temp);
   }
+  std::cout << std::endl;
   freeList(list);
   return NULL;
 }
@@ -98,6 +102,7 @@ expression * orFunc(expression * arglist, environment * env, environment * args)
 expression * ifFunc(expression * arglist, environment * env, environment * args){
   expression * temp;
   slist * list = arglist->data.list;
+  snode * iter = list->head;
   int dofirst = 0;
   if(list->len < 3)
     return NULL;
@@ -293,7 +298,7 @@ int main(int argc, char ** argv){
   (*ENV)["or"] = makeCFunc(&orFunc);
   (*ENV)["and"] = makeCFunc(&andFunc);
   (*ENV)["set"] = makeCFunc(&setFunc);
-  (*ENV)["local"] = makeCFunc(&setFunc);
+  (*ENV)["local"] = makeCFunc(&setFunc2);
   (*ENV)["lambda"] = makeCFunc(&lambdaMakerFunc);
   (*ENV)["pprint"] = makeCFunc(&printAnyFunc);
   (*ENV)["if"] = makeCFunc(&ifFunc);

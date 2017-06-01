@@ -92,7 +92,10 @@ snode * copyNode(snode * node){
 
 slist * copyList(slist * list){
   slist * copy = makeSList();
-  snode * curr = copyNode(list->head), *next;
+  snode * curr, *next;
+  if(list->len == 0)
+    return copy;
+  curr = copyNode(list->head);
   copy->len = list->len;
   copy->head = curr; 
   next = curr->next;
