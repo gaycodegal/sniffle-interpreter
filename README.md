@@ -1,6 +1,6 @@
 # The Sniffle Interpreter
 
-Not well written, but functional and small.
+Not well written, but functional, small, and reasonably fast. Written in C/C++. Also available in JavaScript for kicks.
 
 ## Language Features (Current)
 
