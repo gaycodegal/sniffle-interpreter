@@ -1,4 +1,13 @@
 #include "lispinclude.h"
+#include <iostream>
+#include <string>
+#include <sstream>
+
+#define SNIFFLE_MAJOR 0
+#define SNIFFLE_MINOR 1
+#define SNIFFLE_SUB 1
+
+int replrunning = 0;
 
 expression * printAnyFunc(expression * arglist, environment * env, environment * args){
   expression * temp;
@@ -90,6 +99,11 @@ expression * beginFunc(expression * arglist, environment * env, environment * ar
       deleteExpression(temp);
   }
   return temp;
+}
+
+expression * exitFunc(expression * arglist, environment * env, environment * args){
+  replrunning = 0;
+  return NULL;
 }
 
 expression * whileFunc(expression * arglist, environment * env, environment * args){
@@ -457,11 +471,52 @@ void deleteEnv(environment * env){
   delete env;
 }
 
+int countParens(const char * p){
+  char c;
+  int parens = 0;
+  int i = 0;
+  while((c = p[i++])){
+    if(c == '(')
+      ++parens;
+    else if(c == ')')
+      --parens;
+  }
+  return parens;
+}
+
+void accquireAndGo(environment * env){
+  int parens = 0;
+  std::stringstream s;
+  std::string inputstr;
+  do{
+    std::getline(std::cin, inputstr);
+    parens += countParens(inputstr.c_str());
+    s << inputstr << "\n";
+  }while(parens != 0);
+  expression * prog = parseList((char *)s.str().c_str(), s.str().size()), *temp;
+  for(snode *iter = prog->data.list->head; iter != NULL; iter = iter->next){
+    temp = (expression *)(iter->elem);
+    temp = evalAST(temp, env, NULL);
+    printAny(temp);
+    std::cout << std::endl;
+    deleteExpression(temp);
+  }
+  deleteExpression(prog);
+}
+
+void repl(environment * env){
+  std::cout << "launching sniffle repl v" << SNIFFLE_MAJOR << "." << SNIFFLE_MINOR << "." << SNIFFLE_SUB << std::endl;
+  replrunning = 1;
+  while(replrunning){
+    accquireAndGo(env);
+  }
+}
+
 int main(int argc, char ** argv){
   environment * ENV = new environment();
   std::size_t data_size;
-  char * data = readFile(argv[1], data_size);
-  expression * prog = parseList(data, data_size);
+  char * data;
+  expression * prog;
   snode * iter;
   expression * temp;
   (*ENV)["+"] = makeCFunc(&addFunc);
@@ -482,17 +537,23 @@ int main(int argc, char ** argv){
   (*ENV)["<="] = makeCFunc(&leFunc);
   (*ENV)["="] = makeCFunc(&eqFunc);
   (*ENV)["if"] = makeCFunc(&ifFunc);
+  (*ENV)["exit"] = makeCFunc(&exitFunc);
 
-  for(iter = prog->data.list->head; iter != NULL; iter = iter->next){
-    temp = (expression *)(iter->elem);
-    printAny(temp);
-    std::cout << std::endl;
-    temp = evalAST(temp, ENV, NULL);
-    printAny(temp);
-    std::cout << std::endl;
-    deleteExpression(temp);
+  if(argc == 2){
+    data = readFile(argv[1], data_size);
+    prog = parseList(data, data_size);
+    for(iter = prog->data.list->head; iter != NULL; iter = iter->next){
+      temp = (expression *)(iter->elem);
+      printAny(temp);
+      std::cout << std::endl;
+      temp = evalAST(temp, ENV, NULL);
+      printAny(temp);
+      std::cout << std::endl;
+      deleteExpression(temp);
+    }
+    deleteExpression(prog);
+    delete [] data;
   }
-  deleteExpression(prog);
+  repl(ENV);
   deleteEnv(ENV);
-  delete [] data;
 }

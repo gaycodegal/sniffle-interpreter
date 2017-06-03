@@ -35,7 +35,7 @@ inline void pushInt(expression * parent, char * data, std::size_t & i){
   //std::cout << "&" << data << "&" << std::endl;
 }
 
-expression * parseList(char * data, std::size_t size){
+expression * parseList(char * data, const std::size_t size){
   expression * parent = new expression();
   expression * tmp;
   int type = VAR_EXP;

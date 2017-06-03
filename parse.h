@@ -21,6 +21,6 @@ inline void pushInt(expression * parent, char * data, std::size_t & i);
 /**
    parse a list.
  */
-expression * parseList(char * data, std::size_t size);
+expression * parseList(char * data, const std::size_t size);
 
 #endif
