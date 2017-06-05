@@ -74,6 +74,8 @@ Not well written, but functional, small, and reasonably fast. Written in C/C++. 
   - returns the remaining list
 - (copy EXP)
   - copies an expression; useful for avoiding side effects of cdr
+- (exit)
+  - exits the REPL (Read-Eval-Print Loop)
 
 ## Rules important for use
 
