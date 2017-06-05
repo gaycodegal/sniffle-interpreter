@@ -5,6 +5,7 @@ slist * makeSList(){
   list->head = NULL;
   list->tail = NULL;
   list->len = 0;
+  list->refs = 1;
   return list;
 }
 
@@ -73,6 +74,7 @@ slist * cdrNode(slist * list){
   slist * copy;
   if(list->len == 0) return NULL;
   copy = makeSList();
+  copy->refs = 1;
   if(list->len == 1) return copy;
   copy->len = list->len - 1;
   copy->head = list->head->next;
@@ -102,6 +104,7 @@ slist * copyList(slist * list){
     next = curr->next;
   }
   copy->tail = curr;
+  copy->refs = 1;
   return copy;
 }
 

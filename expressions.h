@@ -48,4 +48,9 @@ void deleteExpression(expression * any);
  */
 expression * copyExpression(expression * any);
 
+/**
+   truly copy any expression
+ */
+expression * trueCopyExpression(expression * any);
+
 #endif

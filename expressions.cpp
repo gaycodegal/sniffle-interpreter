@@ -66,10 +66,12 @@ void deleteExpression(expression * any){
   case LIST_EXP:    
     list = any->data.list;
     if(list != NULL){
-      for (iter = list->head; iter != NULL; iter = iter->next) {
-	deleteExpression((expression *)(iter->elem));
+      if(--(any->data.list->refs) == 0){
+	for (iter = list->head; iter != NULL; iter = iter->next) {
+	  deleteExpression((expression *)(iter->elem));
+	}
+	freeList(list);
       }
-      freeList(list);
     }
     break;
   case STR_EXP:
@@ -88,6 +90,37 @@ void deleteExpression(expression * any){
 }
 
 expression * copyExpression(expression * any){
+  if(any == NULL)
+    return NULL;
+  expression * copy = new expression();
+  slist * list;
+  copy->type = any->type;
+  switch(any->type){
+  case LIST_EXP:    
+    list = any->data.list;
+    copy->data.list = list;
+    ++(list->refs);
+    break;
+  case STR_EXP:
+  case VAR_EXP:
+    copy->data.str = any->data.str;
+    ++(any->data.str->refs);
+    break;
+  case CONST_EXP:
+    copy->data.num = any->data.num;
+    break;
+  case CFUNC_EXP:
+    copy->data.c_func = any->data.c_func;
+    break;
+  case FUNC_EXP:
+    copy->data.func = any->data.func;
+    ++(any->data.func->refs);
+    break;
+  }
+  return copy;
+}
+
+expression * trueCopyExpression(expression * any){
   if(any == NULL)
     return NULL;
   expression * copy = new expression();

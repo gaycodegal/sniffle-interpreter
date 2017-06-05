@@ -18,6 +18,7 @@ typedef struct s_slist {
   snode * head;
   snode * tail;
   int len;
+  int refs;
 } slist;
 
 /**

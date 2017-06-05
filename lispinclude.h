@@ -5,7 +5,6 @@
 #include <stack>
 #include <unordered_map>
 #include <fstream>
-#include <list>
 #include "slist.h"
 #include "datastructures.h"
 #include "printexpression.h"
@@ -18,6 +17,6 @@
 /**
    the types an expression can take on.
  */
-enum EXP_ENUM { LIST_EXP, STR_EXP, VAR_EXP, CONST_EXP, CFUNC_EXP, FUNC_EXP };
+enum EXP_ENUM { LIST_EXP, STR_EXP, VAR_EXP, CONST_EXP, CFUNC_EXP, FUNC_EXP, PTR_EXP };
 
 #endif

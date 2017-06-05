@@ -47,6 +47,60 @@ expression * setFunc(expression * arglist, environment * env, environment * args
   return NULL;
 }
 
+expression * quoteFunc(expression * arglist, environment * env, environment * args){
+  slist * list = arglist->data.list;
+  if(list->len != 1)
+    return NULL;
+  return trueCopyExpression((expression *)(list->head->elem));
+}
+
+expression * copyFunc(expression * arglist, environment * env, environment * args){
+  slist * list = arglist->data.list;
+  expression * temp, *ret;
+  if(list->len != 1)
+    return NULL;
+  temp = evalAST((expression *)(list->head->elem), env, args);
+  ret = trueCopyExpression(temp);
+  deleteExpression(temp);
+  return ret;
+}
+
+expression * carFunc(expression * arglist, environment * env, environment * args){
+  slist * list = arglist->data.list;
+  expression * temp, *ret;
+  if(list->len != 1)
+    return NULL;
+  temp = evalAST((expression *)(list->head->elem), env, args);
+  if(temp->type != LIST_EXP || temp->data.list->len <= 1){
+    deleteExpression(temp);
+    return NULL;
+  }
+  ret = copyExpression((expression *)(temp->data.list->head->elem));
+  deleteExpression(temp);
+  return ret;
+}
+
+expression * cdrFunc(expression * arglist, environment * env, environment * args){
+  slist * list = arglist->data.list;
+  snode * tnode;
+  expression * temp, *ret;
+  if(list->len != 1)
+    return NULL;
+  ret = evalAST((expression *)(list->head->elem), env, args);
+  if(ret->type != LIST_EXP || ret->data.list->len <= 0){
+    deleteExpression(ret);
+    return NULL;
+  }
+  list = ret->data.list;
+  tnode = list->head;
+  temp = (expression *)(tnode->elem);
+  deleteExpression(temp);
+  list->head = tnode->next;
+  free(tnode);
+  --(list->len);
+  return ret;
+}
+
 expression * setFunc2(expression * arglist, environment * env, environment * args){
   expression * var, *arg;
   slist * list = arglist->data.list;
@@ -538,6 +592,10 @@ int main(int argc, char ** argv){
   (*ENV)["="] = makeCFunc(&eqFunc);
   (*ENV)["if"] = makeCFunc(&ifFunc);
   (*ENV)["exit"] = makeCFunc(&exitFunc);
+  (*ENV)["quote"] = makeCFunc(&quoteFunc);
+  (*ENV)["car"] = makeCFunc(&carFunc);
+  (*ENV)["cdr"] = makeCFunc(&cdrFunc);
+  (*ENV)["copy"] = makeCFunc(&copyFunc);
 
   if(argc == 2){
     data = readFile(argv[1], data_size);
