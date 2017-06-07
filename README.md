@@ -19,32 +19,32 @@ Not well written, but functional, small, and reasonably fast. Written in C/C++. 
 - (if BOOL PATH1 PATH2)
   - computes PATH1 if BOOL is not NULL or 0
   - else PATH2
-- (or BOOL1 BOOL2 ... BOOLN)
+- (or BOOL...)
   - computes BOOL1 or BOOL2 or ... or BOOLN
   - evaluates until first true
-- (and BOOL1 BOOL2 ... BOOLN)
+- (and BOOL...)
   - computes BOOL1 and BOOL2 and ... and BOOLN
   - evaluates until first false
 - (set VAR VAL)
   - update the value of a var in the global context
 - (local VAR VAL)
   - update the value of a var in the local context
-- (lambda (VAR1 VAR2 ... VARN) PROG)
+- (lambda (VAR...) PROG)
   - a lambda function.
   - if you use local to update the value of
     any var, it will effect all instances of
     the lambda. Similarly, calling the lambda
     (even recursively) will erase overwrite the value
     of the vars.
-- (pprint EXP1 EXP2 ... EXPN)
+- (pprint EXP...)
   - pretty prints expressions
-- (+ NUM1 NUM2 ... NUMN)
+- (+ NUM...)
   - evaluates NUM1 + NUM2
-- (- NUM1 NUM2 ... NUMN)
+- (- NUM...)
   - evaluates NUM1 - NUM2
-- (/ NUM1 NUM2 ... NUMN)
+- (/ NUM...)
   - evaluates NUM1 / NUM2
-- (* NUM1 NUM2 ... NUMN)
+- (* NUM...)
   - evaluates NUM1 * NUM2
 - (< NUM1 NUM2)
   - evaluates NUM1 < NUM2
@@ -58,10 +58,10 @@ Not well written, but functional, small, and reasonably fast. Written in C/C++. 
   - evaluates NUM1 == NUM2
 - (= STR1 STR2)
   - compares strings for equality
-- (begin EXP1 EXP2 ... EXPN)
+- (begin EXP...)
   - executes commands in sequence
   - returns the result of evaluation of EXPN
-- (while BOOL EXP1 EXP2 ... EXPN)
+- (while BOOL EXP...)
   - will repeat EXP1 EXP2 ... EXPN while BOOL is true
   - returns the result of the last evaluation of EXPN
 - (quote EXP)
@@ -76,6 +76,9 @@ Not well written, but functional, small, and reasonably fast. Written in C/C++. 
   - copies an expression; useful for avoiding side effects of cdr
 - (exit)
   - exits the REPL (Read-Eval-Print Loop)
+- (let ((VAR EXP)...) EXP)
+  - set multiple vars for use as a temporary new local environment
+  - useful for temporarily storing values that might be changed by recursive calls
 
 ## Rules important for use
 

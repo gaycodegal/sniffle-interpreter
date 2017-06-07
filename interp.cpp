@@ -101,6 +101,36 @@ expression * cdrFunc(expression * arglist, environment * env, environment * args
   return ret;
 }
 
+expression * letFunc(expression * arglist, environment * env, environment * args){
+  slist * list = arglist->data.list, *dlist, *vlist;
+  snode * tnode;
+  expression * temp, *defs;
+  environment * letenv;
+  if(list->len != 2)
+    return NULL;
+  defs = (expression *)(list->head->elem);
+  if(defs->type != LIST_EXP){
+    return NULL;
+  }
+  dlist = defs->data.list;
+  for(tnode = dlist->head; tnode != NULL; tnode = tnode->next){
+    temp = (expression *)(tnode->elem);
+    if(temp->type != LIST_EXP)
+      return NULL;
+    if(((expression *)(temp->data.list->head->elem))->type != VAR_EXP)
+      return NULL;
+  }
+  letenv = new environment();
+  for(tnode = dlist->head; tnode != NULL; tnode = tnode->next){
+    temp = (expression *)(tnode->elem);
+    vlist = temp->data.list;
+    (*letenv)[*(((expression *)(vlist->head->elem))->data.str->s)] = evalAST((expression *)(vlist->head->next->elem), env, args);
+  }
+  temp = evalAST((expression *)(list->head->next->elem),env,letenv);
+  deleteEnv(letenv);
+  return temp;
+}
+
 expression * setFunc2(expression * arglist, environment * env, environment * args){
   expression * var, *arg;
   slist * list = arglist->data.list;
@@ -596,6 +626,7 @@ int main(int argc, char ** argv){
   (*ENV)["car"] = makeCFunc(&carFunc);
   (*ENV)["cdr"] = makeCFunc(&cdrFunc);
   (*ENV)["copy"] = makeCFunc(&copyFunc);
+  (*ENV)["let"] = makeCFunc(&letFunc);
 
   if(argc == 2){
     data = readFile(argv[1], data_size);
