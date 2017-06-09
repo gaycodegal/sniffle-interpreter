@@ -21,16 +21,21 @@ expression * makeLambda(LambdaFunc * lam){
 }
 
 expression * makeString(char * ptr, std::size_t length){
-  char c = ptr[length];
-  ptr[length] = 0;
-  std::string * s = new std::string(ptr);
+  std::string * s = new std::string(ptr, length);
   expression * exp = new expression();
   sstr * temp = exp->data.str = new sstr();
   temp->refs = 1;
   temp->s = s;
   exp->type = STR_EXP;
-  ptr[length] = c;
   return exp;
+}
+
+void makeString(expression * exp, std::string * old){
+  std::string * s = new std::string(*old);
+  sstr * temp = exp->data.str = new sstr();
+  temp->refs = 1;
+  temp->s = s;
+  exp->type = STR_EXP;
 }
 
 expression * makeInt(char * ptr, int length){
@@ -77,6 +82,7 @@ void deleteExpression(expression * any){
   case STR_EXP:
   case VAR_EXP:
     if(--(any->data.str->refs) == 0){
+      delete any->data.str->s;
       delete any->data.str;
     }
     break;
@@ -103,8 +109,7 @@ expression * copyExpression(expression * any){
     break;
   case STR_EXP:
   case VAR_EXP:
-    copy->data.str = any->data.str;
-    ++(any->data.str->refs);
+    makeString(copy, any->data.str->s);
     break;
   case CONST_EXP:
     copy->data.num = any->data.num;
