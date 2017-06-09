@@ -39,12 +39,9 @@ void makeString(expression * exp, std::string * old){
 }
 
 expression * makeInt(char * ptr, int length){
-  char c = ptr[length];
-  ptr[length] = 0;
   expression * exp = new expression();
-  exp->data.num = atoi(ptr);
+  exp->data.num = strtol(ptr, NULL, 10);
   exp->type = CONST_EXP;
-  ptr[length] = c;
   return exp;
 }
 

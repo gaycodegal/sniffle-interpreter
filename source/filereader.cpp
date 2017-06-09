@@ -5,7 +5,7 @@ char * readFile(char * file, std::size_t & size){
   std::filebuf* pbuf = ifs.rdbuf();
 
   // get file size using buffer's members
-  size = pbuf->pubseekoff (0,ifs.end,ifs.in);
+  size = (std::size_t)pbuf->pubseekoff (0,ifs.end,ifs.in);
   pbuf->pubseekpos (0,ifs.in);
 
   // allocate memory to contain file data
