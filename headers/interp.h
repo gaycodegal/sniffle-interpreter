@@ -127,6 +127,23 @@ expression * evalAST(expression * prog, environment * env, environment *args);
 void deleteEnv(environment * env);
 
 /**
+   create the standard environment with bindings for the sniffle language
+ */
+environment * createEnv();
+
+/**
+   run the repl
+*/
+void repl(environment * env);
+
+/**
+   run a program. Does not delete prog or ENV.
+   prog must be a LIST_EXP containing various snippets to evaluate.
+   ENV must be the environment to run the program in.
+ */
+void runProgram(expression * prog, environment * ENV);
+
+/**
    parse and run a file in a pretty fashion
  */
 int main(int argc, char ** argv);

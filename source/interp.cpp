@@ -1,4 +1,5 @@
 #include "lispinclude.h"
+#include "snifflemain.h"
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -183,6 +184,14 @@ expression * beginFunc(expression * arglist, environment * env, environment * ar
       deleteExpression(temp);
   }
   return temp;
+}
+
+expression * replFunc(expression * arglist, environment * env, environment * args){
+  slist * list = arglist->data.list;
+  if(list->len != 0)
+    return NULL;
+  repl(env);
+  return NULL;
 }
 
 expression * exitFunc(expression * arglist, environment * env, environment * args){
@@ -596,13 +605,8 @@ void repl(environment * env){
   }
 }
 
-int main(int argc, char ** argv){
+environment * createEnv(){
   environment * ENV = new environment();
-  std::size_t data_size;
-  char * data;
-  expression * prog;
-  snode * iter;
-  expression * temp;
   (*ENV)["+"] = makeCFunc(&addFunc);
   (*ENV)["*"] = makeCFunc(&multiplyFunc);
   (*ENV)["-"] = makeCFunc(&subtractFunc);
@@ -627,22 +631,34 @@ int main(int argc, char ** argv){
   (*ENV)["cdr"] = makeCFunc(&cdrFunc);
   (*ENV)["copy"] = makeCFunc(&copyFunc);
   (*ENV)["let"] = makeCFunc(&letFunc);
+  return ENV;
+}
 
+void runProgram(expression * prog, environment * ENV){
+  expression * temp;
+  snode * iter;
+  for(iter = prog->data.list->head; iter != NULL; iter = iter->next){
+    temp = (expression *)(iter->elem);
+    temp = evalAST(temp, ENV, NULL);
+    printAny(temp);
+    std::cout << std::endl;
+    deleteExpression(temp);
+  }
+}
+
+#ifdef SNIFFLE_MAIN
+int main(int argc, char ** argv){
+  environment * ENV = createEnv();
+  std::size_t data_size;
+  char * data;
+  expression * prog;
   if(argc == 2){
     data = readFile(argv[1], data_size);
     prog = parseList(data, data_size);
-    for(iter = prog->data.list->head; iter != NULL; iter = iter->next){
-      temp = (expression *)(iter->elem);
-      printAny(temp);
-      std::cout << std::endl;
-      temp = evalAST(temp, ENV, NULL);
-      printAny(temp);
-      std::cout << std::endl;
-      deleteExpression(temp);
-    }
+    runProgram(prog, ENV);
     deleteExpression(prog);
     delete [] data;
   }
-  repl(ENV);
   deleteEnv(ENV);
 }
+#endif

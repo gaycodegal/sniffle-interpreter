@@ -1,7 +1,7 @@
 CXX      = g++
-OBJS = $(patsubst %.cpp,%.o,$(wildcard *.cpp))
+OBJS = $(patsubst %.cpp,%.o,$(wildcard ./source/*.cpp))
 CXX_FILE = interp.cpp
-INCPATH=include
+INCPATH=headers
 TARGET   = $(patsubst %.cpp,%,$(CXX_FILE))
 CXXFLAGS = -g -Wall -std=c++11 -pedantic-errors -fmessage-length=0 -I $(INCPATH)
 
