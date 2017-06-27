@@ -447,5 +447,5 @@ var sniffle = (function(){
     return {run:run, parse:parse};
 })();
 
-run("(+ 1 (+ 2 3) )");
+sniffle.run("(+ 1 (+ 2 3) )");
 
